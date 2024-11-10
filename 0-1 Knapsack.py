@@ -1,36 +1,33 @@
-def knapsack_0_1(values, weights, capacity):
-    n = len(values)
+def knapsack_01(items,capacity,n):
     
-    # Create a DP table to store the maximum value at each capacity and item index
-    dp = [[0 for _ in range(capacity + 1)] for _ in range(n + 1)]
-
-    # Build the DP table in bottom-up manner
-    for i in range(1, n + 1):
-        for w in range(1, capacity + 1):
-            if weights[i - 1] <= w:
-                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1])
+    dp=[[0 for _ in range(capacity+1)] for _ in range (n+1)]
+    
+    for i in range(1,n+1):
+        for w in range(capacity +1):
+            if items[i-1].weight<=w:
+                dp[i][w]=max(dp[i-1][w],dp[i-1][w-items[i-1].weight]+items[i-1].value)
             else:
-                dp[i][w] = dp[i - 1][w]
-
-    # The value at dp[n][capacity] will be the maximum value that can be attained
+                dp[i][w]=dp[i-1][w]
+                
     return dp[n][capacity]
 
-def get_user_input():
-    n = int(input("Enter the number of items: "))
-    values = []
-    weights = []
-    
-    for i in range(n):
-        value = int(input(f"Enter value for item {i+1}: "))
-        weight = int(input(f"Enter weight for item {i+1}: "))
-        values.append(value)
-        weights.append(weight)
-    
-    capacity = int(input("Enter the capacity of the knapsack: "))
-    return values, weights, capacity
+class Item:
+    def _init_(self,value,weight):
+        self.value=value
+        self.weight=weight
+        
+capacity=int(input("Enter the capacity of knapsack : "))
+n=int(input("Enter the number of items : "))
 
-# Main program
-if __name__ == "__main__":
-    values, weights, capacity = get_user_input()
-    max_value = knapsack_0_1(values, weights, capacity)
-    print("Maximum value in the knapsack =", max_value)
+items=[]
+
+for i in range(n):
+    value=int(input("Enter the value of item "+str(i+1)+" : "))
+    weight=int(input("Enter the weight of item "+str(i+1)+" : "))
+    
+    obj=Item(value,weight)
+    items.append(obj)
+
+max_value=knapsack_01(items,capacity,n)
+
+print("Maximum value in the knapsack is : ",max_value)
